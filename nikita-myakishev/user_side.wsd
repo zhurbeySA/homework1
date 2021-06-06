@@ -1,0 +1,66 @@
+@startuml
+
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+!pragma teoz true
+
+title **Подсчет и отображение оценки пассажиру**
+
+actor Пассажир as passenger
+
+box "Клиентская сторона" #LightBlue
+participant "Yandex Go (Mobile)" as yandex_mobile_go
+end box
+
+
+box "get_user_score"
+participant "user_score_app" as yandex_back_go
+database "Redis" as redis
+end box
+
+box "user_scores_collector" #LightGreen
+participant user_scores_collector_app as customer_proc
+database "PostgreSQL\nMaster" as postgres_master
+database "PostgreSQL\nSlave" as postgres_slave
+end box
+
+passenger -> yandex_mobile_go : "Посмотреть оценку"
+activate yandex_mobile_go
+
+yandex_mobile_go -> yandex_back_go : GET /score/$user_id
+activate yandex_back_go
+yandex_back_go -> redis : "Взять оценку из кэша"
+activate redis
+
+alt Попадание в кэш
+    redis -> yandex_back_go : OK
+    deactivate redis
+    yandex_back_go -> yandex_mobile_go : 200 OK\n {"success": true, "score": 4.9}
+    deactivate yandex_back_go
+    yandex_mobile_go -> passenger : Ваш рейтинг 4.9
+    deactivate yandex_mobile_go
+else Оценки в кэше нет
+    activate redis
+    redis -> yandex_back_go : not found
+    deactivate redis
+    activate yandex_back_go
+    yandex_back_go -> customer_proc : GET /score/$user_id
+    activate customer_proc
+    customer_proc -> postgres_slave : SELECT score FROM go_users.user_score WHERE user_id = :user_id ORDER BY finish_order_datetime DESC limit :n
+    activate postgres_slave
+    postgres_slave -> customer_proc : OK
+    hnote over customer_proc : Подсчет средней оценки
+    deactivate postgres_slave
+    customer_proc -> yandex_back_go : 200 OK\n {"success": true, "score": 4.9}
+    deactivate customer_proc
+    yandex_back_go -> redis : Записываем пару user_id : user_score и TTL
+    activate redis
+    redis -> yandex_back_go : OK
+    deactivate redis
+    yandex_back_go -> yandex_mobile_go : 200 OK\n {"success": true, "score": 4.9}
+    deactivate yandex_back_go
+    activate yandex_mobile_go
+    yandex_mobile_go -> passenger : Ваш рейтинг 4.9
+    deactivate yandex_mobile_go
+end
+@enduml

@@ -1,0 +1,43 @@
+@startuml
+
+skinparam ParticipantPadding 20
+skinparam BoxPadding 10
+!pragma teoz true
+
+title **Выставление оценки пассажиру водителем**
+
+actor Водитель as driver
+
+box "Клиентская сторона" #LightBlue
+participant "Yandex Pro (Mobile)" as yandex_mobile_pro
+end box
+
+box "user_scores_collector" #LightGreen
+participant user_scores_collector_app as yandex_back
+database "PostgreSQL\nMaster" as postgres_master
+database "PostgreSQL\nSlave" as postgres_slave
+end box
+
+driver -> yandex_mobile_pro : "Выставление оценки пассажиру\nв приложении"
+activate yandex_mobile_pro
+yandex_mobile_pro -> yandex_back : POST /score\n {"driver_id": 1234, "user_id": 4321, "score": 5.0}
+activate yandex_back
+
+yandex_back -> postgres_master : "Сохранение оценки"
+activate postgres_master
+
+{start} postgres_master -> postgres_slave : "Репликация"
+activate postgres_slave
+{end} postgres_slave -> postgres_master : OK
+
+deactivate postgres_slave
+
+postgres_master -> yandex_back : OK
+deactivate postgres_master
+
+yandex_back -> yandex_mobile_pro : 200 OK\n { "success": true}
+deactivate yandex_back
+
+yandex_mobile_pro -> driver : "Спасибо за вашу оценку"
+deactivate yandex_mobile_pro
+@enduml

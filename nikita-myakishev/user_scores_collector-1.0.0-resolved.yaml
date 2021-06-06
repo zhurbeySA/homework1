@@ -1,0 +1,84 @@
+---
+openapi: 3.0.0
+info:
+  title: API for microservice user_scores_collector and user_score_getter
+  description: Get user score
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/NameLeSS-93/user_scores_collector/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://virtserver.swaggerhub.com/NameLeSS-93/yandex_drive_mcrsrvc/1.0.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /score:
+    post:
+      description: Post user score by driver (only for user_scores_collector)
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScoresForm'
+      responses:
+        "200":
+          description: Post score
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoresPost'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+  /score/{user_id}:
+    get:
+      description: Get user scores for N last rides (for both microservices)
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ScoresGet'
+        "400":
+          description: Bad request
+        "404":
+          description: Not found
+components:
+  schemas:
+    ScoresForm:
+      required:
+      - driver_id
+      - regions
+      - score
+      - user_id
+      type: object
+      properties:
+        driver_id:
+          type: integer
+        user_id:
+          type: integer
+        score:
+          type: number
+      additionalProperties: false
+    ScoresGet:
+      type: object
+      properties:
+        success:
+          type: boolean
+        score:
+          type: number
+      additionalProperties: false
+    ScoresPost:
+      type: object
+      properties:
+        success:
+          type: boolean
+      additionalProperties: false
