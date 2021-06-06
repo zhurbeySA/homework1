@@ -16,7 +16,10 @@ paths:
     post:
       description: Destroy favorite driver
       requestBody:
-        $reg: '#/components/requestBodies/favoriteBody'
+        $ref: '#/components/requestBodies/favoriteBody'
+      responses:
+        '200':
+          description: "OK"
 
 components:
   requestBodies:
