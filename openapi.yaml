@@ -1,0 +1,40 @@
+openapi: 3.0.0
+info:
+    title: 'Passenger score'
+    version: '1.0'
+
+paths:
+    /score:
+        post:
+            description: 'Add a new passenger score'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Score'
+            responses:
+                '201':
+                    description: 'Added'
+                '400':
+                    description: 'Bad request'
+                '404':
+                    description: 'Passenger not found'
+
+components:
+    schemas:
+        Score:
+            type: object
+            additionalProperties: false
+            properties:
+                passenger_id:
+                    type: "integer"
+                    format: "int64"
+                score:
+                    type: "integer"
+                    format: "int64"
+                datetime:
+                    type: "string"
+            required:
+              - passenger_id
+              - score
+              - datetime
