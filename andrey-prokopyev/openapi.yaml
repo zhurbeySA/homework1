@@ -1,0 +1,70 @@
+openapi: 3.0.0
+info:
+    title: 'Passenger Rating App'
+    version: '1.0'
+
+paths:
+    /raiting/{passenger_id}:
+        parameters:
+          - in: path
+            name: passenger_id
+            required: true
+            schema:
+                type: integer
+        get:
+            description: 'Get passenger rating'
+            responses:
+                '200':
+                    description: 'OK'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PassengerGetResponse'
+                '404':
+                    description: 'Not found'
+
+        post:
+            description: 'Import passenger rating by id'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PassengerUpdateRequest'
+            responses:
+                '200':
+                    description: 'Imported'
+                '400':
+                    description: 'Bad request'
+                '404':
+                    description: 'Not found'
+
+components:
+    schemas:
+        PassengerGetResponse:
+            type: object
+            additionalProperties: false
+            properties:
+                passenger_id:
+                    type: integer
+                rating:
+                  type: number
+                comments:
+                    type: array
+                    items:
+                        type: string
+            required:
+              - passenger_id
+              - rating
+
+        PassengerUpdateRequest:
+            type: object
+            additionalProperties: false
+            properties:
+                rating:
+                  type: integer
+                comments:
+                  type: array
+                  items:
+                    type: string
+            required:
+              - rating
