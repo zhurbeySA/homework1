@@ -1,0 +1,117 @@
+openapi: 3.0.0
+info:
+    title: 'Family account'
+    version: '1.0'
+
+paths:
+    /api/family_account:
+        post:
+            description: 'Create family account'
+            requestBody:
+                content:
+                  application/json:
+                    schema:
+                        $ref: '#/components/schemas/CreateFamilyPostRequest'
+            responses:
+                '201':
+                    description: 'Created'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateFamilyResponse'
+                '409':
+                    description: "User already in family"
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateFamilyResponse'
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/CreateFamilyResponse'
+        get:
+            description:  'Get current family info'
+            requestBody:
+                content:
+                  application/json:
+                    schema:
+                        $ref: '#/components/schemas/GetFamilyDataRequest'
+            responses:
+                '200':
+                    description: 'Family info'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetFamilyDataResponse'
+                '404':
+                    description: 'No family for passed phone number'
+        delete:
+            description: 'Delete current family by leader'
+            requestBody:
+                content:
+                  application/json:
+                    schema:
+                        $ref: '#/components/schemas/FamilyIdRequest'
+            responses:
+                '204':
+                    description: 'Family deleted successfully'
+                '404':
+                    description: 'No family for passed ID'
+    /api/family_account/leave:
+        post:
+            description: 'Leave from current family account'
+            requestBody:
+                content:
+                  application/json:
+                    schema:
+                        $ref: '#/components/schemas/FamilyIdRequest'
+            responses:
+                '200':
+                    description: 'Leaved successfully'
+                '400':
+                    description: "Can't leave this family"
+
+
+components:
+    schemas:
+        CreateFamilyPostRequest:
+            type: object
+            properties:
+                payment_id:
+                    type: integer
+                members:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/FamilyMemberItem'
+        FamilyMemberItem:
+            type: object
+            properties:
+                phone_number:
+                    type: string
+                nickname:
+                    type: string
+        CreateFamilyResponse:
+            type: object
+            properties:
+                family_id:
+                    type: integer
+        GetFamilyDataRequest:
+            properties:
+                member_phone:
+                    type: string
+        GetFamilyDataResponse:
+            properties:
+                id:
+                    type: integer
+                members:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/FamilyMemberItem'
+                card_short_info:
+                    type: string
+        FamilyIdRequest:
+            properties:
+                family_id:
+                    type: integer
