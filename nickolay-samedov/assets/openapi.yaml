@@ -1,0 +1,80 @@
+openapi: 3.0.0
+
+info:
+    title: 'users-rating'
+    version: '1.0'
+
+paths:
+    /rating:
+        post:
+            description: 'Change rating'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PostRatingRequest'
+            responses:
+                '200':
+                    description: 'OK'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RatingGetResponse'
+                '400':
+                    description: 'Bad request'
+
+    /rating/{user_id}:
+        parameters:
+          - in: path
+            name: user_id
+            required: true
+            schema:
+                type: integer
+        get:
+            description: 'Get user rating'
+            responses:
+                '200':
+                    description: 'OK'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/RatingGetResponse'
+                '404':
+                    description: 'Not found'
+
+components:
+    schemas:
+        PostRatingRequest:
+            type: object
+            additionalProperties: false
+            properties:
+                user_data:
+                    type: object
+                    $ref: '#/components/schemas/UserData'
+            required:
+              - user_data
+
+        RatingGetResponse:
+            type: object
+            additionalProperties: false
+            properties:
+                user_id:
+                    type: integer
+                rating:
+                    type: number
+            required:
+                - user_id
+                - rating
+
+        UserData:
+            type: object
+            additionalProperties: false
+            properties:
+                user_id:
+                    type: integer
+                new_rating:
+                    type: number
+
+                required:
+                    - user_id
+                    - new_rating
