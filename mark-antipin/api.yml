@@ -1,0 +1,63 @@
+swagger: "2.0"
+info:
+  description: "Сервис работающий с оценкой пассажиров от водителей"
+  version: "0.0.1"
+  title: "Сервис Оценок Пассажиров"
+paths:
+  /v1/rating:
+    post:
+      tags:
+      - "rating"
+      summary: "Водитель ставит оценку пассажиру"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: true
+        schema:
+          $ref: "#/definitions/Rating"
+      responses:
+        "200":
+          description: "ok"
+        "422":
+          description: "validation input failed"
+
+  /v1/rating/{clientId}:
+    get:
+      tags:
+      - "rating"
+      parameters:
+        - name: "clientId"
+          in: "path"
+          required: true
+          type: "integer"
+          format: "int64"
+      responses:
+        "200":
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/RatingResp"
+        "422":
+          description: "validation input failed"
+
+definitions:
+  Rating:
+    type: "object"
+    properties:
+      clientId:
+        type: "integer"
+        format: "int64"
+      driverId:
+        type: "integer"
+        format: "int64"
+      rating :
+        type: "number"
+        format: "float4"
+  RatingResp:
+    type: "object"
+    properties:
+      clientId:
+        type: "integer"
+        format: "int64"
+      rating :
+        type: "number"
+        format: "float4"
