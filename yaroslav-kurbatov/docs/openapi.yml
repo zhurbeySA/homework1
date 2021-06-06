@@ -1,0 +1,42 @@
+openapi: 3.0.0
+info:
+    title: 'favorite-drivers microservice API'
+    version: '1.0'
+
+paths:
+  /create:
+    post:
+      description: Create favorite driver
+      requestBody:
+         $ref: '#/components/requestBodies/favoriteBody'
+      responses:
+        '200':
+          description: "OK"
+  /destroy:
+    post:
+      description: Destroy favorite driver
+      requestBody:
+        $reg: '#/components/requestBodies/favoriteBody'
+
+components:
+  requestBodies:
+    favoriteBody:
+      description: A JSON object containing client_id and driver_id
+      required: true
+      content:
+        application/json:
+          schema:
+            title: entry
+            type: object
+            properties:
+              client_id:
+                type: integer
+                format: int64
+                description: client ID
+              driver_id:
+                type: integer
+                format: int64
+                description: driver ID
+            required:
+              - client_id
+              - driver_id
