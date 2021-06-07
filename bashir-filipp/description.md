@@ -21,8 +21,6 @@
 Зачем:
 - Повысить ценность бренда и лояльность к нему у клиента на эмоциональном уровне, за счёт вполне рациональной выгоды.
 
-
-
 MVP:
 1. Для реализации данной фичи необходимо разработать новый микро сервис, который будет хранить любимый маршрут всех пользователей.
 Также данный сервис возьмет на себя расчёты координат. Входят ли данные координаты в диапазон «любимого маршрута» пользователя.
@@ -44,16 +42,20 @@ location2 — точка Б
 install_date — дата установки. Менять любимый маршрут можно только раз в неделю.
 is_active — флаг, который показывает последний выбранный любимый маршрут. Чтобы хранить в БД предыдущие любимые маршруты пользователей.
 
+![ScreenShot](https://github.com/YaBackSchool2021/homework1/blob/filipp/bashir-filipp/screenshots/table.png)
+
 
 Архитектура:
 
 Для данной фичи реализуем возможность пользователям выбирать и смотреть свой любимый маршрут.
-
+![ScreenShot](https://github.com/YaBackSchool2021/homework1/blob/filipp/bashir-filipp/screenshots/add_favoriteway.png)
 
 И возможность сервису расчёта стоимости узнать входит ли выбранный маршрут в любимый у пользователя.
+![ScreenShot](https://github.com/YaBackSchool2021/homework1/blob/filipp/bashir-filipp/screenshots/check_favoriteway.png)
 
 Описание протокола и API
 Доступно в файле openapi.yaml
+[a link](https://github.com/YaBackSchool2021/homework1/blob/filipp/bashir-filipp/openapi.yaml)
 
 Тестирование:
 
