@@ -1,0 +1,192 @@
+openapi: 3.0.0
+info:
+  description: API for customer-rating service used for taxi customers rating calculation
+  version: "1.0.0"
+  title: Yandex Homework 1 API
+  contact:
+    email: vadim.leshyov@yandex.ru
+servers:
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/ClearThree/YandexGO_customer_rating/1.0.0
+paths:
+  /evaluate:
+    post:
+      summary: Post
+      operationId: post_evaluate_post
+      parameters:
+        - required: true
+          schema:
+            title: Operation Id
+            type: integer
+          name: operation_id
+          in: query
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInputModel'
+        required: true
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema: {}
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+  '/user_rating/{user_id}':
+    get:
+      summary: Get
+      operationId: get_user_rating__user_id__get
+      parameters:
+        - required: true
+          schema:
+            title: User Id
+            type: integer
+          name: user_id
+          in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetResponseModel'
+        '422':
+          description: Validation Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HTTPValidationError'
+components:
+  schemas:
+    Evaluation:
+      title: Evaluation
+      required:
+        - score
+        - convenience
+        - neatness
+        - politeness
+        - waiting_time
+        - correctness
+        - mask_on
+      type: object
+      properties:
+        score:
+          title: Score
+          type: integer
+        convenience:
+          title: Convenience
+          type: boolean
+        neatness:
+          title: Neatness
+          type: boolean
+        politeness:
+          title: Politeness
+          type: boolean
+        waiting_time:
+          title: Waiting Time
+          type: boolean
+        correctness:
+          title: Correctness
+          type: boolean
+        mask_on:
+          title: Mask On
+          type: boolean
+    GetResponseModel:
+      title: GetResponseModel
+      required:
+        - status
+        - rating
+      type: object
+      properties:
+        status:
+          title: Status
+          type: string
+        rating:
+          $ref: '#/components/schemas/Rating'
+    HTTPValidationError:
+      title: HTTPValidationError
+      type: object
+      properties:
+        detail:
+          title: Detail
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationError'
+    PostInputModel:
+      title: PostInputModel
+      required:
+        - driver_id
+        - user_id
+        - order_id
+        - evaluation
+      type: object
+      properties:
+        driver_id:
+          title: Driver Id
+          type: integer
+        user_id:
+          title: User Id
+          type: integer
+        order_id:
+          title: Order Id
+          type: integer
+        evaluation:
+          $ref: '#/components/schemas/Evaluation'
+    Rating:
+      title: Rating
+      required:
+        - score
+        - convenience
+        - neatness
+        - politeness
+        - waiting_time
+        - correctness
+        - mask_on
+      type: object
+      properties:
+        score:
+          title: Score
+          type: number
+        convenience:
+          title: Convenience
+          type: number
+        neatness:
+          title: Neatness
+          type: number
+        politeness:
+          title: Politeness
+          type: number
+        waiting_time:
+          title: Waiting Time
+          type: number
+        correctness:
+          title: Correctness
+          type: number
+        mask_on:
+          title: Mask On
+          type: boolean
+    ValidationError:
+      title: ValidationError
+      required:
+        - loc
+        - msg
+        - type
+      type: object
+      properties:
+        loc:
+          title: Location
+          type: array
+          items:
+            type: string
+        msg:
+          title: Message
+          type: string
+        type:
+          title: Error Type
+          type: string
