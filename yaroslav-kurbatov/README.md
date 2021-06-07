@@ -31,7 +31,7 @@
 
 UML sequence diagram для сценария, когда клиент отправил запрос в driver-favorites, через какое-то время воркер отправил два запроса в БД, первый вернул HTTP 500, второй окончился успехом:
 
-![alt UML scheme](./docs/uml.png)
+![alt UML scheme](docs/uml.png)
 
 Примерная OpenAPI-схема для АПИ микросервиса:
 
