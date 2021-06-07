@@ -1,0 +1,120 @@
+openapi: "3.0.0"
+info:
+  title: "Family account"
+  description: "Сommon method of payment for a group of people"
+  version: 0.0.1
+
+paths:
+  /create_family_account:
+    get:
+      responses:
+        "200":
+          description: "acount has been created"
+        "400":
+          description: "account has already been created"
+          
+  /delete_family_account:
+    get:
+      responses:
+        "200":
+          description: "Ok"
+        "400":
+          description: "you don't have control over the family account"
+          content:
+            application/json:
+              schema:
+                type: string
+                
+  /add_member:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserData"
+      responses:
+        "200":
+          description: "Ok"
+          
+        "400":
+          description: "invalid data"
+          
+  /delete_member:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserData"
+      responses:
+        "200":
+          description: "Ok"
+          
+        "400":
+          description: "this user not in the group"
+          content:
+            application/json:
+              schema:
+                type: string
+                
+        "403":
+          description: "no right to delete this user"
+          content:
+            application/json:
+              schema:
+                type: string
+          
+  /add_payment_method:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: "payment method id"
+              type: integer
+              
+      responses:
+        "200":
+          description: "Ok"
+          
+        "400":
+          description: "payment method was not found"
+          content:
+            application/json:
+              schema:
+                type: string
+                
+  /delete_payment_method:
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: "payment method id"
+              type: integer
+      responses:
+        "200":
+          description: "Ok"
+          
+        "400":
+          description: "payment method was not linked"
+          content:
+            application/json:
+              schema:
+                type: string
+              
+components:
+  schemas:
+    UserData:
+      type: object
+      
+      properties:
+        phone:
+          type: integer
+          minimum: 11
+          maximum: 11
+          
+        fullName:
+          type: string
+
+        
