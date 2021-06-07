@@ -1,0 +1,141 @@
+openapi: 3.0.1
+info:
+  title: 'Yandex Go'
+  version: '1.0'
+
+paths:
+  /v1/favoriteway/{userId}:
+    parameters:
+    - in: path
+      name: userId
+      required: true
+      schema:
+          type: integer
+
+    get:
+      description: 'Маршрут без повышенного коэффициента'
+      responses:
+        '200':
+          description: 'Любимый маршрут пользователя'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FavoriteWay'
+
+        '400':
+          description: 'Bad request'
+          content:
+              application/json:
+                  schema:
+                      type: object
+                      additionalProperties: true
+                      properties:
+                          validation_error:
+                            $ref: '#/components/schemas/FavoriteWayAP'
+                      required:
+                        - validation_error
+    post:
+      description: 'Пользователь выбрал любимый маршрут'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavoriteWay'
+
+
+
+      responses:
+        '201':
+          description: 'Created'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FavoriteWay'
+
+        '400':
+          description: 'Bad request'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: true
+                properties:
+                  validation_error:
+                    $ref: '#/components/schemas/FavoriteWayAP'
+                required:
+                  - validation_error
+
+
+  /v1/check/{userId}:
+    parameters:
+    - in: path
+      name: userId
+      required: true
+      schema:
+          type: integer
+
+    post:
+      description: 'Является ли данный маршрут любимым у пользователя'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FavoriteWay'
+
+
+
+      responses:
+        '200':
+          description: 'Да или нет'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CheckFavoriteWay'
+
+components:
+  schemas:
+    FavoriteWay:
+      type: object
+      additionalProperties: false
+      properties:
+        user_id:
+          type: integer
+        location1:
+          type: object
+          properties:
+            lat:
+              type: number
+            long:
+              type: number
+        location2:
+          type: object
+          properties:
+            lat:
+              type: number
+            long:
+              type: number
+        install_date:
+          type: string
+          example: '2021-06-05T10:33:01.42Z'
+      required:
+        - location1
+        - location2
+        - install_date
+
+    FavoriteWayAP:
+      type: object
+      additionalProperties: true
+      $ref: '#/components/schemas/FavoriteWay'
+
+
+    CheckFavoriteWay:
+      type: object
+      additionalProperties: false
+      properties:
+        favoriteway_or_not:
+          type: string
+          enum:
+            - YES
+            - NO
+      required:
+        - favoriteway_or_not
