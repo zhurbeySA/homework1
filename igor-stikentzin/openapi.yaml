@@ -1,0 +1,149 @@
+openapi: 3.0.0
+info:
+    title: 'Фича с семейным аккаунтом'
+    version: '1.0'
+
+paths:
+    /account:
+        post:
+            description: 'Work with account'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/AccountPostRequest'
+            responses:
+                '200':
+                    description: 'OK'
+                    content:
+                        application/json:
+                            schema:
+                              type: object
+                              additionalProperties: false
+                              properties:
+                                accounts:
+                                  type: array
+                                  items:
+                                    $ref: '#/components/schemas/AccountId'
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                additionalProperties: false
+                                properties:
+                                  data_error:
+                                    type: array
+                                    items:
+                                      $ref: '#/components/schemas/AccountError'
+                                required:
+                                  - data_error
+
+    /pay:
+        post:
+            description: 'Pay taxi ride'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PayPostRequest'
+            responses:
+                '200':
+                    description: 'OK'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PaymentId'
+                '400':
+                    description: 'Bad request'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                additionalProperties: false
+                                properties:
+                                    payment_error:
+                                        $ref: '#/components/schemas/PaymentError'
+                                required:
+                                  - payment_error
+
+components:
+    schemas:
+        AccountPostRequest:
+          type: object
+          additionalProperties: false
+          properties:
+            request_type: 
+              type: string
+              enum:
+                - add
+                - change
+                - delete
+            data:
+              type: array
+              items:
+                $ref: '#/components/schemas/AccountItem'
+          required:
+            - data
+            - request_type
+              
+        AccountItem:
+          type: object
+          additionalProperties: false
+          properties:
+              account_id:
+                type: integer
+              family_account_id:
+                type: integer
+              account_name:
+                type: string
+              credit_card_id:
+                type: integer
+        
+        AccountId:
+          type: object
+          additionalProperties: false
+          properties:
+            account_id:
+              type: integer
+            family_account_id:
+              type: integer
+              
+        AccountError:
+          type: object
+          additionalProperties: false
+          properties:
+            account_id:
+              type: integer
+            family_account_id:
+              type: integer
+            error_description:
+              type: string
+    
+        PayPostRequest:
+          type: object
+          additionalProperties: false
+          properties:
+            transaction_id:
+              type: integer
+            account_id:
+              type: integer
+            card_id:
+              type: integer
+              
+        PaymentId:
+          type: object
+          additionalProperties: false
+          properties:
+            transaction_id:
+              type: integer
+              
+        PaymentError:
+          type: object
+          additionalProperties: false
+          properties:
+            transaction_id:
+              type: integer
+            error_description:
+              type: string
