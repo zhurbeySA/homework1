@@ -16,3 +16,5 @@
 
 #### Sequence Diagram
 ![diagram](sequence_diagram.png)
+
+API смотреть в [passenger_rating.yml](passenger_rating.yml)

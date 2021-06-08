@@ -1,0 +1,71 @@
+openapi: 3.0.0
+info:
+    title: 'Passenger rating '
+    version: '0.1'
+
+paths:
+    /passenger_rating/{user_id}:
+        parameters:
+          - in: path
+            name: user_id
+            required: true
+            schema:
+                type: integer
+        get:
+            description: 'Get rating'
+            responses:
+                '200':
+                    description: 'OK'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetRating'
+                '404':
+                    description: 'Not found'
+
+    /passenger_rating/:
+        
+        post:
+            description: 'Send rating'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PostRating'
+            responses:
+                '201':
+                    description: 'Created'
+                '400':
+                    description: 'Bad request'
+
+components:
+    schemas:
+        PostRating:
+            type: object
+            additionalProperties: false
+            properties:
+                passenger_id:
+                    type: integer
+                politenss_rating:
+                    type: integer
+                accuracy_rating:
+                    type: integer
+            required:
+              - passenger_id
+              - politenss_rating
+              - accuracy_rating
+                
+        GetRating:
+            type: object
+            additionalProperties: false
+            properties:
+                overall_rating:
+                    type: integer
+                politenss_rating:
+                    type: integer
+                accuracy_rating:
+                    type: integer
+            required:
+              - overall_rating
+              - politenss_rating
+              - accuracy_rating 
