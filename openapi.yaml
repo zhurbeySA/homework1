@@ -1,0 +1,135 @@
+openapi: 3.0.0
+info:
+    title: 'Candy Delivery App'
+    version: '1.0'
+
+paths:
+    /dispute_feedback
+    post:
+        description: 'Open a dispute with driver about received feedback'
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/DisputeFeedbackRequest'
+        responses:
+            '200':
+                description: 'Created'
+            '400':
+                description: 'Wrong input data'
+            '500':
+                decription: 'Server error'
+    
+    /get_client_rating
+    get:
+        description: 'returns current client's rating'
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/GetClientRatingRequest'
+        responses:
+            '200':
+                description: 'Client's current rating'
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/ClientRating'
+            '400':
+                description: 'Wrong input data'
+            '500':
+                decription: 'Server error'
+    
+
+    /send_feedback
+    post:
+        description: 'Add feedback about a client specified by client_id'
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/SendFeedbackRequest'
+        responses:
+            '200':
+                description: 'Feedback sending was successful'
+            '400':
+                description: 'Wrong input data'
+            '500':
+                decription: 'Server error'
+
+
+    /update_feedback
+    post:    
+        description: 'update information about sent feedback'
+        requestBody:
+            content:
+                application/json:
+                    schema:
+                        $ref: '#/components/schemas/UpdateFeedbackRequest'
+        responses:
+            '200':
+                description: 'Information about feedback was successfully updated'
+            '400':
+                description: 'Wrong input data'
+            '500':
+                decription: 'Server error'
+
+components:
+    schemas:
+        DisputeFeedbackRequest:
+            type: object
+            additionalProperties: false
+            properties:
+                client_id:
+                    type: integer
+                feedback_id:
+                    type: integer 
+            required:
+              - client_id
+              - feedback_id
+        
+        GetClientRatingRequest:
+            type: object
+            additionalProperties: false
+            properties:
+                client_id:
+                    type: integer
+            required:
+              - client_id
+
+        ClientRating:
+            type: object
+            additionalProperties: false
+            properties:
+                client_id:
+                    type: integer
+            required:
+              - client_id
+        SendFeedbackRequest:
+            type: object
+            additionalProperties: false
+            properties:
+                client_id:
+                    type: integer
+                rating:
+                    type: number
+                description:
+                    type: object
+            required:
+              - client_id
+
+        UpdateFeedbackRequest:
+            type: object
+            additionalProperties: false
+            properties:
+                client_id:
+                    type: integer
+                feedback_id:
+                    type: integer
+                rating:
+                    type: number
+                description:
+                    type: object
+            required:
+              - client_id
+              - feedback_id
