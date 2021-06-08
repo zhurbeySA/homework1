@@ -58,7 +58,7 @@ rating = sum(mark_1 + ... + mark_N) / N
 
 ### API
 
-Описание приведено для новой ручки `GET /user_mark` и новое поле для ручки `POST /order/complete` в микросервисе orders ([Файл с описанием API](file://swagger.yaml)).
+Описание приведено для новой ручки `GET /user_mark` и новое поле для ручки `POST /order/complete` в микросервисе orders ([Файл с описанием API]((../blob/oleg-gritchin/swagger.yaml)).
 
 [Вверх](#Содержание)
 
