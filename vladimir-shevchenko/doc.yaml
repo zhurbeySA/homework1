@@ -1,0 +1,87 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/vovashevchenko1964/passenger_rating/1.0.0
+info:
+  version: "1.0.0"
+  title: passenger_rating
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+paths:
+  /raitings:
+    post:
+      summary: Post
+      operationId: post_raiting
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostInputRaiting'
+        required: true
+      responses:
+        '201':
+          description: Successful Response
+        '400':
+          description: invalid request
+    get:
+      summary: Get
+      operationId: get_user_raiting
+      parameters:
+        - required: true
+          schema:
+            title: User Id
+            type: integer
+            format: int64
+          name: user_id
+          in: path
+      responses:
+        '200':
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetUserRaiting'
+        '404':
+          description: Not found
+
+components:
+  schemas:
+    PostInputRaiting:
+      title: PostInputRaiting
+      required:
+        - user_id
+        - score
+      type: object
+      properties:
+        driver_id:
+          title: driver id
+          type: integer
+          format: int64
+        user_id:
+          title: user id
+          type: integer
+          minimum: 1
+          maximum: 5
+        score:
+          title: score
+          type: integer
+          format: int64
+
+    GetUserRaiting:
+      title: GetUserRaiting
+      required:
+        - score
+      type: object
+      properties:
+        score:
+          title: raiting user
+          type: number
+          format: float
+        last_update:
+          title: timestamp
+          type: integer
+          format: int64
