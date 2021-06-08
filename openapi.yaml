@@ -34,7 +34,8 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/ClientRating'
+                            client_rating:
+                                type: number
             '400':
                 description: 'Wrong input data'
             '500':
@@ -52,6 +53,11 @@ paths:
         responses:
             '200':
                 description: 'Feedback sending was successful'
+                content:
+                    application/json:
+                        schema:
+                            feedback_id:
+                                type: integer
             '400':
                 description: 'Wrong input data'
             '500':
@@ -97,14 +103,6 @@ components:
             required:
               - client_id
 
-        ClientRating:
-            type: object
-            additionalProperties: false
-            properties:
-                client_id:
-                    type: integer
-            required:
-              - client_id
         SendFeedbackRequest:
             type: object
             additionalProperties: false

@@ -24,13 +24,13 @@
 
 Для водительского приложения:
 
-- send_feedback(client_id, rating, description=None)
+- send_feedback(client_id, rating, description=None) -> feedback_id: integer
 - update_feedback(client_id, feedback_id, rating=None, description=None)
-- get_client_rating(client_id)
+- get_client_rating(client_id) -> client_rating: float
 
 Для клиентского приложения:
 
-- get_client_rating(client_id)
+- get_client_rating(client_id) -> client_rating: float
 - dispute_feedback(client_id, feedback_id)
 
 Для MVP можно предоставить окно с выбором рейтинга ("звездочки") и две причины: "грязь в салоне", "неадекватное поведение". 
