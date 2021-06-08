@@ -1,0 +1,197 @@
+openapi: 3.0.3
+info:
+  title: EmailReport service
+  description: Сервис отправки отчета о поездке на почту
+  version: 1.0.0
+  contact:
+    name: YurokSov
+    email: yurokshar@gmail.com
+  license:
+    name: Unlicense
+    url: https://unlicense.org/
+paths:
+  /api/account/mail:
+    summary: CRUD эл.почты клиента
+    parameters:
+      - name: userId
+        in: query
+        description: UID клиента
+        required: true
+        allowEmptyValue: false
+        schema:
+          $ref: "#/components/schemas/userId"
+    get:
+      operationId: GetAccountMail
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                  - userId
+                  - email
+                properties:
+                  userid:
+                    $ref: "#/components/schemas/userId"
+                  email:
+                    type: string
+                    default: someone@example.com
+        400:
+          $ref: "#/components/responses/BadRequestResponse"
+        404:
+          $ref: "#/components/responses/NotFoundResponse"
+        422:
+          $ref: "#/components/responses/UnprocessableEntityResponse"
+    post:
+      operationId: PostAccountMail
+      responses:
+        200:
+          $ref: "#/components/responses/OKResponse"
+        400:
+          $ref: "#/components/responses/BadRequestResponse"
+        404:
+          $ref: "#/components/responses/NotFoundResponse"
+        422:
+          $ref: "#/components/responses/UnprocessableEntityResponse"
+    patch:
+      operationId: PatchAccountMail
+      responses:
+        200:
+          $ref: "#/components/responses/OKResponse"
+        400:
+          $ref: "#/components/responses/BadRequestResponse"
+        404:
+          $ref: "#/components/responses/NotFoundResponse"
+        422:
+          $ref: "#/components/responses/UnprocessableEntityResponse"
+    delete:
+      operationId: DeleteAccountMail
+      responses:
+        200:
+          $ref: "#/components/responses/OKResponse"
+        400:
+          $ref: "#/components/responses/BadRequestResponse"
+        404:
+          $ref: "#/components/responses/NotFoundResponse"
+        422:
+          $ref: "#/components/responses/UnprocessableEntityResponse"
+  /api/account/mail/verify:
+    post:
+      operationId: VerifyEmailAddress
+      parameters:
+        - name: userId
+          in: query
+          description: UID клиента
+          required: true
+          allowEmptyValue: false
+          schema:
+            $ref: "#/components/schemas/userId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - token
+              properties:
+                token:
+                  type: string
+                  default: some secret string
+      responses:
+        200:
+          $ref: "#/components/responses/OKResponse"
+        400:
+          $ref: "#/components/responses/BadRequestResponse"
+        404:
+          $ref: "#/components/responses/NotFoundResponse"
+        422:
+          $ref: "#/components/responses/UnprocessableEntityResponse"
+  /api/reports:
+    get:
+      operationId: GetReports
+      parameters:
+        - name: userId
+          in: query
+          description: UID клиента
+          required: true
+          allowEmptyValue: false
+          schema:
+            $ref: "#/components/schemas/userId"
+        - name: before
+          in: query
+          description: до этого момента
+          required: false
+          allowEmptyValue: false
+          schema:
+            $ref: "#/components/schemas/timePoint"
+        - name: after
+          in: query
+          description: после этого момента
+          required: false
+          allowEmptyValue: false
+          schema:
+            $ref: "#/components/schemas/timePoint"
+      responses:
+        200:
+          $ref: "#/components/responses/OKResponse"
+        400:
+          $ref: "#/components/responses/BadRequestResponse"
+        404:
+          $ref: "#/components/responses/NotFoundResponse"
+        422:
+          $ref: "#/components/responses/UnprocessableEntityResponse"
+components:
+  schemas:
+    userId:
+      type: number
+      format: int64
+      minimum: 1
+      default: 123
+    timePoint:
+      type: string
+      format: date-time
+      default: гггг.мм.дд 00:00:00
+  responses:
+    OKResponse:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              msg:
+                type: string
+                default: Useful message
+    BadRequestResponse:
+      description: BadRequest
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              msg:
+                type: string
+                default: Useful message
+    NotFoundResponse:
+      description: NotFound
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              msg:
+                type: string
+                default: Useful message
+    UnprocessableEntityResponse:
+      description: UnprocessableEntity
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              msg:
+                type: string
+                default: Useful message
