@@ -1,0 +1,162 @@
+openapi: 3.0.0
+info:
+  version: '1.0'
+  title: Рейтинг пользователей
+  description: Выставление рейтинга пользователям со стороны водителей
+paths:
+  /v1/order/user-rating:
+    get:
+      description: Получение выставленной оценки за заказ
+      operationId: getOrderUserScore
+      parameters:
+        - name: order_id
+          description: ID заказа
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  order_id:
+                    type: string
+                    description: ID Заказа
+                    example: "1"
+                  score:
+                    type: integer
+                    format: int32
+                    example: 5
+        "404":
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  code:
+                    type: string
+                    description: Код ошибки
+                    example: "order_not_found"
+    post:
+      description: Сохранение выставленной оценки
+      operationId: createOrderUserScore
+      parameters:
+        - name: order_id
+          description: ID заказа
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+        - name: user_id
+          description: ID пользователя
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+        - name: score
+          description: Полученная оценка
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int32
+            min: 1
+            max: 5
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  order_id:
+                    type: string
+                    description: ID Заказа
+                    example: "1"
+                  score:
+                    type: integer
+                    format: int32
+                    example: 5
+
+  /v1/user/rating:
+   get:
+      description: Получение рейтинга пользователя
+      operationId: getUserRating
+      parameters:
+        - name: user_id
+          description: ID пользователя
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  order_id:
+                    type: string
+                    description: ID пользователя
+                    example: "1"
+                  score:
+                    type: number
+                    format: float
+                    example: 4.98
+        "404":
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  code:
+                    type: string
+                    description: Код ошибки
+                    example: "user_not_found"
+            
+   put:
+      description: Обновление рейтинга пользователя
+      operationId: updateUserRating
+      parameters:
+        - name: user_id
+          description: ID пользователя
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  order_id:
+                    type: string
+                    description: ID пользователя
+                    example: "1"
+                  score:
+                    type: number
+                    format: float
+                    example: 4.98
