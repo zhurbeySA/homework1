@@ -1,0 +1,62 @@
+---
+swagger: "2.0"
+info:
+  description: ""
+  version: "1.0"
+  title: microservice
+host: virtserver.swaggerhub.com
+basePath: /misha_block/microservice/1.0
+schemes:
+- https
+paths:
+  /user_mark:
+    get:
+      parameters:
+      - in: body
+        name: body
+        description: User id to count user mark by it
+        required: true
+        schema:
+          $ref: '#/definitions/User'
+      responses:
+        "200":
+          description: Request ok
+        "400":
+          description: User not found
+  /order/complete:
+    post:
+      parameters:
+      - in: body
+        name: body
+        description: Completed order
+        required: true
+        schema:
+          $ref: '#/definitions/Order'
+      responses:
+        "200":
+          description: Request ok
+        "400":
+          description: Order not found
+definitions:
+  User:
+    type: object
+    properties:
+      userid:
+        type: integer
+        format: int64
+      user_rating:
+        type: integer
+        format: int64
+      other_user_fields:
+        type: string
+  Order:
+    type: object
+    properties:
+      orderid:
+        type: integer
+        format: int64
+      other_order_fields:
+        type: string
+      passenger_mark:
+        type: integer
+        format: int64
