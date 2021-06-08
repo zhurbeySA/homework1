@@ -1,0 +1,19 @@
+@startuml
+
+actor Driver #yellow
+
+alt Выставление новой оценки пассажиру
+Driver -> Backend : POST Request
+database DB
+Backend <-> DB : Сохранить оценку в БД
+Driver <- Backend : POST Response
+Backend --> Backend : Пересчитать рейтинг для пользователя
+Backend --> DB: Сохранить рейтинг в таблицу выше
+
+else Получение текущего рейтинга пассажира
+Driver -> Backend: GET Request
+Backend <-> DB: Рейтинг из таблицы ниже
+Driver <- Backend: GET Response
+end
+
+@enduml

@@ -1,0 +1,141 @@
+openapi: 3.0.3
+info:
+  title: Рейтинг пассажира
+  description: Выставление оценки водителем после завершения поездки
+  version: 0.1-SNAPSHOT
+
+paths:
+  '/passenger-rating':
+    post:
+      summary: 'Добавляет новую оценку от водителя'
+      operationId: addRating
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PassengerRating'
+      responses:
+        201:
+          description: 'Оценка добавлена'
+        400:
+          description: 'Некорректный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  '/passenger-rating/{passenger_id}':
+    get:
+      summary: 'Выдает оценку для конкретного пассажира'
+      operationId: getRating
+      parameters:
+        - in: path
+          name: passenger_id
+          schema:
+            type: integer
+          required: true
+          description: ID пассажира для которого надо вернуть рейтинг
+      responses:
+        200:
+          description: 'Оценка получена'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PassengerRatingResponse'
+        404:
+          description: 'Пассажир не найден'
+
+  '/passenger-rating/calculate':
+    put:
+      summary: 'Запускает процесс пересчета рейтинга пассажира'
+      operationId: refreshRating
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PassengerRatingCalculation'
+      responses:
+        200:
+          description: 'Рейтинг успешно пересчитан'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PassengerRatingResponse'
+        400:
+          description: 'Некорректный запрос'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+components:
+  schemas:
+    PassengerRating:
+      required:
+        - driver_id
+        - passenger_id
+        - trip_id
+        - score
+      type:
+        object
+      properties:
+        driver_id:
+          type: integer
+          format: int64
+          example: 107606558
+        passenger_id:
+          type: integer
+          format: int64
+          example: 427908176
+        trip_id:
+          type: integer
+          format: int64
+          example: 257974133
+        score:
+          type: number
+          format: double
+          example: 4.89
+        created_at:
+          type: string
+          format: date-time
+          example: "2017-07-21T17:32:28Z"
+        comment:
+          type: string
+          example: "cool"
+
+    PassengerRatingResponse:
+      required:
+        -score
+      type:
+        object
+      properties:
+        score:
+          type: number
+          format: double
+          example: 4.89
+
+    PassengerRatingCalculation:
+      required:
+        -passenger_id
+        -calculated_at
+      type:
+        object
+      properties:
+        passenger_id:
+          type: integer
+          format: int64
+          example: 427908176
+        calculated_at:
+          type: string
+          format: date-time
+          example: "2017-07-21T17:32:28Z"
+
+    ErrorResponse:
+      required:
+        -message
+      type:
+        object
+      properties:
+        message:
+          type: string
+          example: "wrong information in body"
