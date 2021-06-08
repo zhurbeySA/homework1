@@ -1,0 +1,73 @@
+---
+openapi: 3.0.0
+info:
+  title: Passenger rating
+  contact:
+    email: opushnev.ia@phystech.edu
+  version: "1.0"
+servers:
+- url: https://virtserver.swaggerhub.com/ven-shupo/1.0/1.0
+  description: SwaggerHub API Auto Mocking
+paths:
+  /rating/{client_id}:
+    get:
+      parameters:
+      - name: client_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetRating'
+        "400":
+          description: Invalid clinetID supplied
+        "404":
+          description: ClinetID not found or no ratings
+    post:
+      parameters:
+      - name: client_id
+        in: path
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostRating'
+        required: true
+      responses:
+        "200":
+          description: Rated
+        "400":
+          description: Invalid clinetID supplied
+        "404":
+          description: ClinetID not found
+components:
+  schemas:
+    GetRating:
+      type: object
+      properties:
+        rating:
+          type: integer
+          description: Client rating
+    PostRating:
+      type: object
+      properties:
+        clinetid:
+          type: integer
+          format: int64
+        rating:
+          type: integer
+          format: int32
+        message:
+          type: string
