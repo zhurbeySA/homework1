@@ -2,14 +2,18 @@ openapi: "3.0.0"
 info:
   title: "Family account"
   description: "Сommon method of payment for a group of people"
-  version: 0.0.1
+  version: 0.0.2
 
 paths:
   /create_family_account:
     get:
       responses:
-        "200":
+        "201":
           description: "acount has been created"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountID"
         "400":
           description: "account has already been created"
           
@@ -17,7 +21,11 @@ paths:
     get:
       responses:
         "200":
-          description: "Ok"
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AccountID"
         "400":
           description: "you don't have control over the family account"
           content:
@@ -34,10 +42,18 @@ paths:
               $ref: "#/components/schemas/UserData"
       responses:
         "200":
-          description: "Ok"
+          description: "OK"
+          content:
+            applicatin/json:
+              schema:              
+                $ref: "#/components/schemas/UserID"
           
         "400":
           description: "invalid data"
+          content:
+            applicatin/json:
+              schema:              
+                $ref: "#/components/schemas/UserID"
           
   /delete_member:
     post:
@@ -47,7 +63,7 @@ paths:
             schema:
               $ref: "#/components/schemas/UserData"
       responses:
-        "200":
+        "204":
           description: "Ok"
           
         "400":
@@ -70,11 +86,10 @@ paths:
         content:
           application/json:
             schema:
-              description: "payment method id"
-              type: integer
+              $ref: "#/components/schemas/PaymentID"
               
       responses:
-        "200":
+        "204":
           description: "Ok"
           
         "400":
@@ -93,7 +108,7 @@ paths:
               description: "payment method id"
               type: integer
       responses:
-        "200":
+        "204":
           description: "Ok"
           
         "400":
@@ -107,7 +122,7 @@ components:
   schemas:
     UserData:
       type: object
-      
+      additionalProperties: false
       properties:
         phone:
           type: integer
@@ -116,5 +131,37 @@ components:
           
         fullName:
           type: string
-
+      
+      required:
+        - phone
+        - fullName
+      
+    AccountID:
+      type: object
+      additionalProperties: false
+      properties:
+        account_id:
+          type: integer
+          
+      required:
+        - account_id
         
+    UserID:
+      type: object
+      additionalProperties: false
+      properties:
+        user_id:
+          type: integer
+      
+      required:
+        - user_id
+  
+    PaymentID:
+      type: object
+      additionalProperties: false
+      properties:
+        payment_id:
+          type: integer
+          
+      required:
+        - payment_id
