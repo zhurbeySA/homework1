@@ -1,0 +1,15 @@
+@startuml
+actor Driver
+actor Passenger
+control passenger_rating
+
+database BD
+Driver -> passenger_rating : POST /passenger_rating/
+passenger_rating -> BD : сохранить данные
+BD --> passenger_rating : OK
+passenger_rating --> Driver : 201 OK
+Passenger -> passenger_rating : GET /passenger_rating/{user_id}
+passenger_rating -> BD : запросить рейтинг
+BD --> passenger_rating : рейтинг
+passenger_rating --> Passenger : рейтинг (200 OK)
+@enduml 
