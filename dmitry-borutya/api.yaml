@@ -1,0 +1,67 @@
+openapi: 3.0.0
+info:
+  title: 'email-report app'
+  version: '1.0'
+
+paths:
+  /email/send_report:
+    post:
+        description: 'Send report on email'
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendReportPostRequest'
+        responses:
+            '201':
+                description: 'Created'
+            '400':
+                description: 'Bad request'
+
+  /email/send_report_period:
+    post:
+        description: 'Send report period on email'
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SendReportPeriodPostRequest'
+        responses:
+            '201':
+                description: 'Created'
+            '400':
+                description: 'Bad request'
+
+components:
+  schemas:
+    SendReportPostRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        user_id:
+          type: integer
+          example: 1
+        order_id:
+          type: integer
+          example: 1
+      required:
+      - user_id
+      - order_id
+
+    SendReportPeriodPostRequest:
+      type: object
+      additionalProperties: false
+      properties:
+        user_id:
+          type: integer
+          example: 1
+        date_from:
+          type: string
+          example: '2021-05-10'
+        date_to:
+          type: string
+          example: '2021-06-10'
+      required:
+      - user_id
+      - date_from
+      - date_to
