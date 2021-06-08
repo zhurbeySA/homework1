@@ -1,0 +1,138 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Homework1
+  description: ''
+paths:
+  /userlevelservice/level/{user_id}:
+    get:
+      description: "Get Info about user level and points"
+      parameters: [
+        {
+          "name": "user_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": integer
+          }
+        }
+      ]
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserLevelInfo"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserNotFoundError"
+    put:
+      parameters: [
+        {
+          "name": "user_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": integer
+          }
+        }
+      ]
+      description: "Update information about points"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PointsPackage"
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserLevelInfo"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserNotFoundError"
+  /userlevelservice/privilege/{user_id}:
+    get:
+      description: "Get Info about user level and points"
+      parameters: [
+        {
+          "name": "user_id",
+          "in": "path",
+          "required": true,
+          "schema": {
+            "type": integer
+          }
+        }
+      ]
+      responses:
+        "200":
+          description: "OK"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserPrivileges"
+        "404":
+          description: "Not Found"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserNotFoundError"
+components:
+  schemas:
+    PointsPackage:
+      description: Data about new points assigned to user
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        user_id:
+          type: integer
+          format: int64
+        points:
+          type: integer
+          format: int
+    UserLevelInfo:
+      description: Information about user level and remaining point to get upgraded to next level
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        user_id:
+          type: integer
+          format: int64
+        level:
+          type: object
+        points:
+          type: integer
+          format: int
+    UserNotFoundError:
+      description: User Not Found Error
+      type: object
+      properties:
+        user_id:
+          type: integer
+          format: int64
+    UserPrivileges:
+      description: Data about user privileges
+      type: object
+      properties:
+        user_id:
+          type: integer
+          format: int64
+        user_level:
+          type: object
+        user_privileges:
+          type: array
+          items:
+            type: object
