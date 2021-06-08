@@ -56,7 +56,6 @@ components:
     ScoresForm:
       required:
       - driver_id
-      - regions
       - score
       - user_id
       type: object
