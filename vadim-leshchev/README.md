@@ -42,10 +42,10 @@ ___
 собственной экспертизы). Предусмотрены две ручки - POST на добавление оценки (если таковой еще нет с переданным OperationID), и GET на её получение.
 Оценки хранятся в PostgreSQL БД в таблице Evaluations следующего вида:
 
-|   OrderID  |  UserID  | Score | Convenience| Neatness | Politeness | Waiting_time | Correctness |  OperationID | MaskOn  | DateTimeFinished |
-| :--------: | :------: | :---: | :--------: | :------: | :--------: | :----------: | :---------: |  :---------: |:-------:| :--------------: |
-|   11111    |  22222   |   4   |    True    |   False  |    True    |    False     |     True    |    12345     |  True   | 2021-06-07 23:12:04 |
-|   44444    |  55555   |   5   |    True    |   True   |    True    |    True      |     True    |    56789     |  False  | 2021-06-07 23:54:02 |
+|   OrderID  |  UserID  | Score | Convenience| Neatness | Politeness | Waiting_time | Correctness | MaskOn  | DateTimeFinished |
+| :--------: | :------: | :---: | :--------: | :------: | :--------: | :----------: | :---------: |:-------:| :--------------: |
+|   11111    |  22222   |   4   |    True    |   False  |    True    |    False     |     True    |  True   | 2021-06-07 23:12:04 |
+|   44444    |  55555   |   5   |    True    |   True   |    True    |     True     |     True    |  False  | 2021-06-07 23:54:02 |
 
 Рейтинг хранится в табличке Ratings следующего вида: 
 

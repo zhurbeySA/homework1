@@ -13,13 +13,6 @@ paths:
     post:
       summary: Post
       operationId: post_evaluate_post
-      parameters:
-        - required: true
-          schema:
-            title: Operation Id
-            type: integer
-          name: operation_id
-          in: query
       requestBody:
         content:
           application/json:
@@ -113,15 +106,11 @@ components:
     PostInputModel:
       title: PostInputModel
       required:
-        - driver_id
         - user_id
         - order_id
         - evaluation
       type: object
       properties:
-        driver_id:
-          title: Driver Id
-          type: integer
         user_id:
           title: User Id
           type: integer
