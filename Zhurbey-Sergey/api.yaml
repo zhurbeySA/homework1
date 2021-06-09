@@ -1,0 +1,216 @@
+openapi: 3.0.0
+info:
+  title: 'Family account'
+  version: '1.0'
+
+paths:
+  /group:
+    post:
+      description: 'Create new family-account'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                user_id:
+                  type: integer
+                group_name:  # As users can be members of multiple "family accounts", groups should have names
+                  type: string
+      responses:
+        '201':
+          description: 'Created'
+          content:
+            application/json:
+              schema:
+                properties:
+                  group_id:
+                    type: integer
+                required:
+                  - group_id
+        '400':
+          description: 'Bad request'
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties: false
+                properties:
+                  validation_error:
+                    $ref: '#/components/schemas/GroupValidationError'
+                  required:
+                    - validation_error
+
+    get:
+      description: 'get all user family accounts ids'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                user_id:
+                  type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                properties:
+                  groups:
+                    type: array
+                    items:
+                      type: integer
+                required:
+                  - groups
+        '400':
+          description: 'No user with provided user_id'
+
+  /group/{group_id}:
+    parameters:
+      - in: path
+        name: group_id
+        required: true
+        schema:
+          type: integer
+    get:
+      description: 'Get detailed group information'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                user_id:
+                  type: integer
+      responses:
+        '200':
+          description: 'OK'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupItem'
+        '400':
+          description: 'Bad request, no such a group/user'
+
+    delete:
+      description: 'delete group'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              properties:
+                user_id:
+                  type: integer
+      responses:
+        '200':
+          description: 'OK'
+        '400':
+           description: 'Bad request, no such a group/user'
+        '403':
+           description: 'Problems with access'
+
+    patch:
+      description: 'Update group info'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                user_id:
+                  type: integer
+                group_name:
+                  type: string
+                new_owner:
+                  type: integer  # pick new user as new owner of the project
+      responses:
+        '200':
+          description: 'OK'
+        '400':
+          description: 'Bad request'  # group_name validation, new_owner isn't group member/doesn't exist, no group
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GroupPatchError'
+        '404':
+          description: 'Access denied'  # No rights for this action
+
+  /add_member:
+    description: 'Add new member to group'
+    requestBody:
+      content:
+        application/json:
+          schema:
+            properties:
+              user_id:
+                type: integer  # current user who sent the request
+              group_id:
+                type: integer
+              user_email:  # new user, the one we want to add to the group
+                type: string
+            required:
+              - user_id
+              - group_id
+              - user_email
+    responees:
+      '200':
+        description: 'OK'
+      '400':
+        description: 'Bad request'  # No group or no user with email
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddMemberError'
+      '404':
+        description: 'Access denied'  # no rights for this action
+
+components:
+  schemas:
+    GroupItem:  # family-account data
+      type: object
+      additionalProperties: false
+      properties:
+        group_id:
+            type: integer
+        group_name:
+          type: string
+        owner_id:
+          type: integer
+        members:
+          type: array
+          items:
+            type: integer
+      required:
+        - group_id
+        - group_name
+        - owner_id
+        - members
+
+    GroupValidationError:
+      type: object
+      additionalProperties: true  # can add any additional fields to describe the problem
+      properties:
+        group_name:
+          type: string  # group name validation errors
+
+    GroupPatchError:
+      type: object
+      additionalProperties: true  # can add any additional fields to describe the problem
+      properties:
+        user_id:
+          type: string
+        group_name:
+          type: string
+        new_owner:
+          type: string
+
+    AddMemberError:
+      additionalProperties: true  # can add any additional fields to describe the problem
+      properties:
+        user_id:
+          type: string
+        group_id:
+          type: string
+        user_email:
+          type: string
