@@ -1,0 +1,65 @@
+openapi: 3.0.0
+info:
+    title: 'Сервис рейтинга пассажиров'
+    version: '0.0.1'
+
+paths:
+    /passenger_rating/{passenger_id}:
+        parameters:
+          - in: path
+            name: passenger_id
+            required: true
+            schema:
+                type: integer
+        get:
+            description: 'Получение рейтинга пассажира'
+            responses:
+                '200':
+                    description: 'OK'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/GetPassengerRating'
+                '404':
+                    description: 'No such passenger ID in DB'
+
+    /passenger_rating/:
+
+        post:
+            description: 'Добавление рейтинга пассажира к заказу'
+            requestBody:
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/PostPassengerRating'
+            responses:
+                '201':
+                    description: 'Created'
+                '400':
+                    description: 'Bad request'
+                '404':
+                    description: 'No such order ID in DB'
+
+components:
+    schemas:
+
+        GetPassengerRating:
+            type: object
+            additionalProperties: false
+            properties:
+                rating:
+                    type: integer
+            required:
+              - rating
+
+        PostPassengerRating:
+            type: object
+            additionalProperties: false
+            properties:
+                order_id:
+                    type: integer
+                rating:
+                    type: integer
+                required:
+              - order_id
+              - rating
