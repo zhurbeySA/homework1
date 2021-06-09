@@ -1,0 +1,147 @@
+openapi: '3.0.2'
+info:
+  title: Family account
+  version: '1.0'
+
+paths:
+  /family-account:
+    post:
+      description: Creates new family account
+      requestBody:
+        content:
+          application/json:
+            schema:
+                properties:
+                  person_id:
+                    type: integer
+      responses:
+        '201':
+          description: created
+          content:
+            application/json:
+              schema:
+                properties:
+                  account_id:
+                    type: integer
+        '400':
+          description: User already belong to other family account
+
+    delete:
+      description: Deletes family account
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Family account not found
+
+    get:
+      description: Returns account members
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                properties:
+                  person_id:
+                    type: integer
+                  person_name:
+                    type: string
+              example:
+                person_id: 22
+                person_name: Zakahrov Denis
+        '404':
+          description: Family account not found
+  /member:
+    post:
+      description: Adds new member to account 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                account_id:
+                  type: integer
+                person_id:
+                  type: integer      
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: User already belong to other family account
+        '404':
+          description: Family account not found
+    delete:
+      description: Deletes member from account
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                account_id:
+                  type: integer
+                person_id:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Person does not belong to this family account
+        '404':
+          description: Family account not found
+
+  /change-payment-method:
+    post:
+      description: Adds or changes payment method 
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                account_id:
+                  type: integer
+                payment_id:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Family account not found
+  
+  /accept:
+    post:
+      description: Accept family account invite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                account_id:
+                  type: integer
+                person_id:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Family account not found
+
+  /reject:
+    post:
+      description: Reject family account invite
+      requestBody:
+        content:
+          application/json:
+            schema:
+              properties:
+                account_id:
+                  type: integer
+                person_id:
+                  type: integer
+      responses:
+        '200':
+          description: OK
+        '404':
+          description: Family account not found
+
+
