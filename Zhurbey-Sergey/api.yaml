@@ -120,8 +120,8 @@ paths:
               properties:
                 user_id:
                   type: integer
-                group_name:
-                  type: string
+                group_id:
+                  type: integer
                 new_owner:
                   type: integer  # pick new user as new owner of the project
       responses:
